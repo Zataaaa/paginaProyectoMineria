@@ -12,8 +12,11 @@ sns.set_style("whitegrid")
 st.title(" Seguridad Vial - Enero 2024")
 
 # Cargar datos
-ruta = "./Datos/Seguridad_Vial_concatenado_Enero_2024.csv"
-df = pd.read_csv(ruta)
+archivo = st.file_uploader("Carga tu archivo CSV", type=["csv"])
+if archivo is not None:
+    df = pd.read_csv(archivo)
+    st.write(df)
+
 
 
 # Mostrar dataset original
@@ -66,3 +69,4 @@ st.markdown("""
 - Se visualizó la distribución de edad antes y después de la limpieza.
 - Se normalizó la edad para facilitar comparaciones entre variables.
 """)
+
