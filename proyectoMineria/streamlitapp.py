@@ -19,10 +19,6 @@ if archivo is not None:
 
 
 
-# Mostrar dataset original
-st.subheader(" Dataset original")
-st.write(f" Tamaño: {df.shape[0]} filas, {df.shape[1]} columnas")
-st.dataframe(df)
 
 # Diagnóstico de nulos
 st.subheader(" valores nulos")
@@ -69,4 +65,5 @@ st.markdown("""
 - Se visualizó la distribución de edad antes y después de la limpieza.
 - Se normalizó la edad para facilitar comparaciones entre variables.
 """)
+
 
