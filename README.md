@@ -1,0 +1,2 @@
+# paginaProyectoMineria
+streamlit de mineria
