@@ -79,7 +79,7 @@ if archivo:
         ax3.set_title("Comparación antes y después de normalizar años carros")
         st.pyplot(fig3)
 
-    st.subheader("🚨 Causas más frecuentes de siniestros")
+    st.subheader(" Causas más frecuentes de siniestros")
     causas = ['CONDUCTOR DISTRAIDO', 'ALCOHOL', 'PAVIMENTO MOJADO', 'DORMIDO', 'EXPLOSION LLANTA']
     causas = [c for c in causas if c in df.columns]
     conteo_causas = df[causas].sum().sort_values(ascending=False)
@@ -116,6 +116,7 @@ if archivo:
         ax_disc.set_ylabel("Número de Lesionados")
         ax_disc.set_title("Distribución por Grupo de Edad (Discretización)")
         st.pyplot(fig_disc)
+
 
 
 
