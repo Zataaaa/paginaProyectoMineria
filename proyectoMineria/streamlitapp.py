@@ -22,20 +22,23 @@ if archivo is not None:
     st.subheader("Valores nulos por columna")
     st.dataframe(df.isnull().sum())
 
-    # 🧹 Eliminar columnas con más del 50% de nulos
-    umbral = 0.5
-    columnas_a_eliminar = df.columns[df.isnull().mean() > umbral]
+    # 🧹 Eliminar columnas con más del 50% de nulos, excepto columnas clave
+    columnas_clave = ['EDAD LESIONADO', 'GENERO LESIONADO']
+    columnas_a_eliminar = [col for col in df.columns if df[col].isnull().mean() > 0.5 and col not in columnas_clave]
     df.drop(columns=columnas_a_eliminar, inplace=True)
-    st.write(f"Se eliminaron {len(columnas_a_eliminar)} columnas con más del {int(umbral*100)}% de valores nulos.")
-    st.write("Columnas eliminadas:", list(columnas_a_eliminar))
+    st.write(f"Se eliminaron {len(columnas_a_eliminar)} columnas con más del 50% de valores nulos.")
+    st.write("Columnas eliminadas:", columnas_a_eliminar)
 
     # 🔁 Limpieza basada en columnas clave
-    columnas_clave = ['EDAD LESIONADO', 'GENERO LESIONADO']
-    df_clean = df.dropna(subset=columnas_clave)
+    columnas_existentes = [col for col in columnas_clave if col in df.columns]
+    if columnas_existentes:
+        df_clean = df.dropna(subset=columnas_existentes)
+        st.write(f"Se eliminaron {len(df) - len(df_clean)} filas con nulos en columnas clave.")
+    else:
+        st.warning("Las columnas clave no están disponibles. Se usará el dataset original.")
+        df_clean = df.copy()
 
-    # 📊 Mostrar dataset limpio
     st.subheader("Dataset después de limpieza")
-    st.write(f"Se eliminaron {len(df) - len(df_clean)} filas con nulos en edad o género del lesionado.")
     st.dataframe(df_clean)
 
     # 📊 Visualización: género de lesionados
@@ -56,7 +59,7 @@ if archivo is not None:
         st.pyplot(fig2)
 
     # 🔁 Transformación: normalización de edad
-    if 'EDAD LESIONADO' in df_clean.columns:
+    if 'EDAD LESIONADO' in df_clean.columns and df_clean['EDAD LESIONADO'].notnull().any():
         scaler = MinMaxScaler()
         df_clean['EDAD NORMALIZADA'] = scaler.fit_transform(df_clean[['EDAD LESIONADO']])
         st.subheader("Edad normalizada")
@@ -66,11 +69,13 @@ if archivo is not None:
     st.markdown("""
     ### Justificación
     - Se muestra el dataset original para entender la estructura y calidad de los datos.
-    - Se eliminaron columnas con más del 50% de valores nulos para mejorar la calidad del análisis.
-    - Se eliminaron valores nulos en edad y género para asegurar consistencia.
+    - Se eliminaron columnas con más del 50% de valores nulos, preservando las variables clave.
+    - Se eliminaron filas con nulos en edad y género para asegurar consistencia.
     - Se visualizó la distribución de edad antes y después de la limpieza.
     - Se normalizó la edad para facilitar comparaciones entre variables.
     """)
+
+
 
 
 
